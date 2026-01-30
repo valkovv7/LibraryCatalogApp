@@ -1,5 +1,6 @@
-app.get('/health', (req, res) => res.send('ok'));
-
+app.listen(3030, '0.0.0.0', () => {
+  console.log('Server started on port 3030');
+});
 
 (function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('http'), require('fs'), require('crypto')) :
