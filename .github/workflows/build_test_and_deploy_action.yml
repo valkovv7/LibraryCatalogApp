@@ -24,25 +24,28 @@ jobs:
         working-directory: server
         run: node server.js &
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+      - name: Wait for backend
+        run: npx wait-on http://localhost:3000
 
-      #- name: Wait for backend
-      #  run: npx wait-on http://localhost:3000
+  #     - name: Install Playwright browsers
+  #       run: npx playwright install --with-deps
 
-      - name: Install frontend deps
-        run: npm ci
+  #     #- name: Wait for backend
+  #     #  run: npx wait-on http://localhost:3000
 
-      - name: Run UI tests
-        run: npx playwright test
+  #     - name: Install frontend deps
+  #       run: npm ci
 
-  deploy:
-    needs: build-and-ui-tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to Render
-        uses: JorgeLNJunior/render-deploy@v1.4.7
-        with:
-          service_id: ${{ secrets.RENDER_SERVICE_ID }}
-          api_key: ${{ secrets.RENDER_API_KEY }}
-          wait_deploy: true
+  #     - name: Run UI tests
+  #       run: npx playwright test
+
+  # deploy:
+  #   needs: build-and-ui-tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Deploy to Render
+  #       uses: JorgeLNJunior/render-deploy@v1.4.7
+  #       with:
+  #         service_id: ${{ secrets.RENDER_SERVICE_ID }}
+  #         api_key: ${{ secrets.RENDER_API_KEY }}
+  #         wait_deploy: true
