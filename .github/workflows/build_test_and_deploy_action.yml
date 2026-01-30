@@ -22,10 +22,10 @@ jobs:
 
       - name: Start backend
         working-directory: server
-        run: node server.js &
+        run: nohup node server.js > backend.log 2>&1 &
 
       - name: Wait for backend
-        run: npx wait-on http://localhost:3030
+        run: npx wait-on http://localhost:3030/health --timeout 30000 --verbose
 
       - name: Check backend logs
         run: |
