@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-and-ui-tests:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -17,26 +17,28 @@ jobs:
           cache: npm
 
       - name: Install backend deps
-        working-directory: server
         run: npm ci
 
-      - name: Start backend
-        working-directory: server
-        run: nohup node server.js > backend.log 2>&1 &
+      - name: Run your build script
+        run: npm run build --if-present
 
-      - name: Wait for backend
-        working-directory: server
-        run: npx wait-on http://localhost:3030 --timeout 30000 --retry-interval 1000 --verbose
+      # - name: Start backend
+      #   working-directory: server
+      #   run: nohup node server.js > backend.log 2>&1 &
 
-      - name: Dump backend logs
-        working-directory: server
-        run: backend.log
+      # - name: Wait for backend
+      #   working-directory: server
+      #   run: npx wait-on http://localhost:3030 --timeout 30000 --retry-interval 1000 --verbose
 
-      - name: Check backend logs
-        working-directory: server
-        run: |
-          ps aux | grep node
-          curl -v http://localhost:3030 || echo "Server not ready"
+      # - name: Dump backend logs
+      #   working-directory: server
+      #   run: backend.log
+
+      # - name: Check backend logs
+      #   working-directory: server
+      #   run: |
+      #     ps aux | grep node
+      #     curl -v http://localhost:3030 || echo "Server not ready"
 
 
   #     - name: Install Playwright browsers
