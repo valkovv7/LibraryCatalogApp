@@ -25,12 +25,12 @@ jobs:
         run: node server.js &
 
       - name: Wait for backend
-        run: npx wait-on http://127.0.0.1:3000
+        run: npx wait-on http://localhost:3030
 
       - name: Check backend logs
         run: |
           ps aux | grep node
-          curl -v http://127.0.0.1:3000 || echo "Server not ready"
+          curl -v http://localhost:3030 || echo "Server not ready"
 
 
   #     - name: Install Playwright browsers
