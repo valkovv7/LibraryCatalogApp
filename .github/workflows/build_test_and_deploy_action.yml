@@ -21,6 +21,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      # ---------- FRONTEND ----------
+      - name: Install dependencies
+        run: npm install
+
+
       # ---------- BACKEND ----------
       - name: Install backend deps
         run: npm ci
@@ -33,9 +38,6 @@ jobs:
       - name: Wait for backend to be ready
         run: npx wait-on http://localhost:3000
 
-      # ---------- FRONTEND ----------
-      - name: Install dependencies
-        run: npm install
       - name: Run tests
         run: npm test
 
