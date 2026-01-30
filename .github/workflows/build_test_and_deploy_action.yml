@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  ui-tests:
+  build_test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -23,11 +23,9 @@ jobs:
 
       # ---------- BACKEND ----------
       - name: Install backend deps
-        working-directory: server
         run: npm ci
 
       - name: Start backend
-        working-directory: server
         run: |
           node server.js &
           echo $! > server.pid
@@ -36,10 +34,18 @@ jobs:
         run: npx wait-on http://localhost:3000
 
       # ---------- FRONTEND ----------
-      - name: Install frontend deps
-        working-directory: frontend
-        run: npm ci
-
-      - name: Run UI tests
-        working-directory: frontend
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
         run: npm test
+
+  deploy:
+    needs: build_test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Render
+        uses: JorgeLNJunior/render-deploy@v1.4.7
+        with:
+          service_id: ${{ secrets.RENDER_SERVICE_ID }}
+          api_key: ${{ secrets.RENDER_API_KEY }}
+          wait_deploy: true
