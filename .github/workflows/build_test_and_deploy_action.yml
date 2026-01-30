@@ -37,11 +37,14 @@ jobs:
           node server.js &
           echo $! > server.pid
 
-      #- name: Wait for backend to be ready
-      #  run: npx wait-on http://localhost:3000
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Wait for backend to be ready
+        run: npx wait-on http://localhost:3000
 
       - name: Run tests
-        run: npm test
+        run: npx playwright test
 
   deploy:
     needs: build_test
